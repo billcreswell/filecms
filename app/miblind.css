@@ -1,0 +1,17 @@
+body {color: #fff;background-color: #000033; font-size:1em;}
+a:link {color: #FFFF99;	text-decoration: none;}
+a:visited {text-decoration: none;color:#ccc;}
+a:hover {text-decoration: underline;color: #FFFF66;}
+a:active {text-decoration: none;}
+
+#Content, #Banner {width:900px;margin: auto;}
+
+#Banner {border-bottom:2px #fff solid;}
+
+#Main {float:left;width:700px;}
+
+#Menu {float:right;width:150px;margin-top:50px;}
+
+#LogoContainer {float:left;width:700px;text-align:center;}
+
+#LogoContainer img {margin:auto}
