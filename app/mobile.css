@@ -5,21 +5,20 @@ body {
     letter-spacing: .05em;  
     line-height: 1.25; 
     font-family:Trebuchet MS, Helvetica, sans-serif;
-    width:40em;
-    margin: 1px auto;
+    margin: 1em auto;
 }
 a:link {color: #FFFF99;	}
 a:visited {color:#ccc;}
 a:hover {color: #FFFF66;}
 a:active {}
 
-h1 {font-size:1.4em;margin:2px;}
+h1 {font-size:1.4em}
 h1,h2,h3,h4 { margin:2px }
 
-#Content {height:800px:}
+#Content {padding:.5em;}
 
 #Banner {
-    margin:1em 0 1em 0;
+    margin:1px;
     font-weight:bold;
     color:#000033;
     background-color:#CCCCD6;
@@ -32,9 +31,8 @@ h1,h2,h3,h4 { margin:2px }
 #Banner a:visited {color:#000033;}
 #Banner a:hover {color: #000033;}
 
-#Menu {text-align:center;margin-top:5em;}
-#Menu li {display:inline;margin:4px;}
-
+#Menu { text-align:center; }
+#Menu li { float:left;margin:4px;list-style-type:none }
 
 .org {
     border:1px gainsboro:solid;
