@@ -64,7 +64,7 @@
             }
         };
     // additional menu items
-        $menu .= "<li><a href='https://www.facebook.com/pages/Michigan-Council-Of-The-Blind-Visually-Impaired/125509287540911'>MCBVI on Facebook</a></li>";
+        $menu .= "<li><a href='https://www.facebook.com/'>Facebook</a></li>";
         return $menu;
     }
 
@@ -219,7 +219,7 @@
 ?>
 
     <div id="Banner">
-        <a href="/">MCBVI</a>
+        <a href="/">filecms</a>
         <a href="#Menu">Skip to Menu</a>
         <br style="clear:both"/>
     </div>
