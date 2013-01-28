@@ -13,26 +13,32 @@
 // get requested page
     if (isset($_REQUEST["page"]) && $_REQUEST["page"] != "") {
         $page = $_REQUEST["page"];
-    } else $page = "home";
+    } else $page="home";
 
 /**
  * Get Content
- * @description: basic routing - this will get the top level content
+ * this will get the top level content
  */
+
     function getContent($page)
     {
+
         switch ($page) {
             case "home":
             case "index":
             case "":
-            // home page
+            #content="Index";
                 $content = file_get_contents("pages/home.html");
                 break;
+
             case "newsletters":
-            // newsletter page
                 $content = file_get_contents("pages/newsletters.html");
-            // add director list
-                $content .= getDirList($page);
+                $content.= getDirList($page);
+                break;
+
+            case "articles":
+                $content = file_get_contents("pages/articles.html");
+                $content.= getDirList($page);
                 break;
 
             default:
@@ -42,50 +48,42 @@
         return $content;
     }
 
-/**
- * Menu List
- * @description Get menu from list of files in pages directory
- * @return html list of pages for menu
- */
     function getMenuList()
     {
-    // show home menu first, everywhere but the home page
-        if (isset($_REQUEST["page"]) && $_REQUEST["page"] != "home") {
-            $menu = "<li><a href='/'>Home</a></li>";
-        } else {
-            $menu = "";
+        $menu = "<ul>";
+        if(isset($_REQUEST["page"]) && $_REQUEST["page"] != "home") {
+            $menu .= "<li><a href='/'>Home</a></li>";
         }
-    // get listing from the pages directory
+
         $dirlist = getFileList("pages/", true, 1);
-        foreach ($dirlist as $file) {
-        // show all items in pages except home
+        foreach($dirlist as $file) {
             if ($file['name'] != "Home") {
                 $menu.="<li><a href='?page={$file['call']}'>{$file['name']}</a></li>";
             }
         };
-    // additional menu items
-        $menu .= "<li><a href='https://www.facebook.com/'>Facebook</a></li>";
+        $menu.= "<li>
+<a href='https://www.facebook.com/pages/Michigan-Council-Of-The-Blind-Visually-Impaired/125509287540911'>
+MCBVI on Facebook</a></li>";
+        $menu.= "</ul>";
         return $menu;
     }
 
-/**
- * Get Directory List
- * @param string directory
- * @return html list of links
- */
     function getDirList($dir)
     {
         $list = "";
-        $dirlist = getFileList("$dir/", true, 1);
-        foreach ($dirlist as $file) {
-            $fname = $file["path"];
-            $list .= "<li><a href='$fname'>{$file['name']} ({$file['type']})</li>";
+        $dirlist = getFileList("$dir/", true,1);
+        foreach($dirlist as $file) {
+            if ($file["type"] == "dir") {
+                $fname = ucwords(str_replace("_"," ", $file["name"]));
+                $list .= "</ul><h3>{$fname}</h3><ul>";
+            } else {
+                $fname = $file["path"];
+                $list.="<li><a href='$fname'>{$file['name']}</a> ({$file['type']})</li>";
+            }
         };
         return $list;
     }
 
-//********************
-// Using the getFile List
 // single directory
 //$dirlist = getFileList("./");
 // include all subdirectories recursively
@@ -96,17 +94,9 @@
 
 // Original PHP code by Chirp Internet: www.chirp.com.au
 // Please acknowledge use of this code by including this header.
-/***************************************************************/
- /**
-  * Get File List
-  * @description directory listing
-  * @param string dir, boolean recurse, int depth
-  * @return retval array of files
-  */
-    function getFileList($dir, $recurse = false, $depth = false)
+
+    function getFileList($dir, $recurse=false, $depth=false)
     {
-        $retval = array();
-    // incase you want to link with icons
         $types = array(
             "doc" => "word_icon.png",
             "gif" => "image_icon.png",
@@ -118,19 +108,15 @@
             "ppt" => "powerpoint_icon.png",
             "xls" => "excel_icon.png"
         );
-    // add trailing slash if missing
-        if (substr($dir, -1) != "/") {
-            $dir .= "/";
-        }
-    // open pointer to directory and read list of files
-        $d = @dir($dir) or die("getFileList: Failed opening directory $dir for reading");
 
+        $retval = array();
+// add trailing slash if missing
+        if (substr($dir, -1) != "/") $dir .= "/";
+// open pointer to directory and read list of files
+        $d = @dir($dir) or die("getFileList: Failed opening directory $dir for reading");
         while (false !== ($entry = $d->read())) {
-        // skip hidden files
-            if ($entry[0] == ".") {
-                continue;
-            }
-        // is directory
+  // skip hidden files
+            if ($entry[0] == ".") continue;
             if (is_dir("$dir$entry")) {
                 $retval[] = array(
                     "path" => "$dir$entry/",
@@ -139,14 +125,13 @@
                     "size" => 0,
                     "lastmod" => filemtime("$dir$entry")
                 );
-            // check directory for recursion
                 if ($recurse && is_readable("$dir$entry/")) {
-                    if ($depth === false) {
+                    if($depth === false) {
                         $retval = array_merge(
                         $retval, getFileList("$dir$entry/", true));
-                    } elseif ($depth > 0) {
+                    } elseif($depth > 0) {
                         $retval = array_merge(
-                        $retval, getFileList("$dir$entry/", true, $depth-1));
+                            $retval, getFileList("$dir$entry/", true, $depth-1));
                     }
                 }
             } elseif (is_readable("$dir$entry")) {
@@ -169,23 +154,19 @@
         return $retval;
     }
 
-// Template
-
 ?><!doctype html>
 <html>
-
-    <head>
-
+<head>
     <title><?php echo $page; ?></title>
-
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <meta charset="UTF-8"/>
-
     <meta name="HandheldFriendly" content="true"/><!--Blackberry Column View-->
     <meta name="viewport" content="initial-scale=1.0"/><!--iPod-->
     <meta name="viewport" content="width=device-width"/><!--android-->
+
+
     <link rel="stylesheet" href="app/mobile.css" type="text/css" media="only screen and (max-width : 39em)"/>
     <!--[if lt IE 9]>
     <link rel="stylesheet" media="all" type="text/css" href="app/miblind.css"/>
@@ -194,47 +175,45 @@
 
     <!--<link href="images/logo57.png" rel="apple-touch-icon"/>-->
 
+
     <script type="text/javascript">
-    //<![CDATA[
-    // Google Analytics
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-31081251-1']);
-        _gaq.push(['_trackPageview']);
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    //]]>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-31081251-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
     </script>
-
 </head>
 
 <body>
 
 <?php
-// display banner on anything but home page
     if(isset($_REQUEST["page"]) && ($_REQUEST["page"] != "home")) {
 ?>
 
-    <div id="Banner">
-        <a href="/">filecms</a>
-        <a href="#Menu">Skip to Menu</a>
-        <br style="clear:both"/>
-    </div>
+<div id="Banner">
+    <a href="/">MCBVI</a>
+    <a href="#Menu">Skip to Menu</a>
+    <br style="clear:both"/>
+</div>
 
-<?php }
-// Display Page Content
+<?php
+    }
 ?>
+
     <div id="Content">
         <?php echo getContent($page); ?>
     </div>
-<?php
-//Display menu
-?>
-    <div id = "Menu" role = "nav">
+
+    <div id="Menu" role="navigation">
         <?php echo getMenuList(); ?>
+        <br style="clear:both"/>
     </div>
 
 </body>
