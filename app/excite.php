@@ -36,6 +36,24 @@
                 $content.= getDirList($page);
                 break;
 
+            case "newsletter":
+            case "article":
+            case "event":
+                if(isset($_REQUEST["issue"])) {
+                     $issuepage = "newsletters/" . $_REQUEST['issue'];
+                     $content = file_get_contents($issuepage);
+                    
+                } elseif(isset($_REQUEST["articleid"])) {
+                     $viewid = "articles/" . $_REQUEST['articleid'];
+                     $content = file_get_contents($viewid);
+                 } elseif(isset($_REQUEST["eventid"])) {
+                     $viewid = "events/" . $_REQUEST['eventid'];
+                     $content = file_get_contents($viewid);
+                } else {
+                    $content = "no issue specified";   
+                }
+               
+                break;
             case "articles":
                 $content = file_get_contents("pages/articles.html");
                 $content.= getDirList($page);
@@ -63,7 +81,8 @@
                     $menu.="<li><a href='?page={$file['call']}'>{$file['name']}</a></li>";
                 } elseif(isset($_REQUEST["page"]) && strtoupper($_REQUEST["page"]) === strtoupper($file['name'])) { 
                     $menu.="<li>{$file['name']}</li>";
-
+                } else {
+                     $menu.="<li><a href='?page={$file['call']}'>{$file['name']}</a></li>";
                 }
             }
         };
@@ -79,12 +98,33 @@ MCBVI on Facebook</a></li>";
         $list = "";
         $dirlist = getFileList("$dir/", true,1);
         foreach($dirlist as $file) {
+            $fname = "";
             if ($file["type"] == "dir") {
                 $fname = ucwords(str_replace("_"," ", $file["name"]));
                 $list .= "</ul><h3>{$fname}</h3><ul>";
             } else {
-                $fname = $file["path"];
-                $list.="<li><a href='$fname'>{$file['name']}</a> ({$file['type']})</li>";
+                if(isset($_REQUEST["page"]) && $_REQUEST["page"] === 'newsletters'){
+                    $issuepath = explode("/",$file["path"]);
+                    $issue=$issuepath[1];
+                
+                    $list.="<li><a href='?page=newsletter&issue=$issue'>{$file['name']}</a></li>";
+                }elseif(isset($_REQUEST["page"]) && $_REQUEST["page"] === 'articles'){
+                    if($file["type"]==="html") {
+                    $issuepath = explode("/",$file["path"]);
+                    $issue=$issuepath[1];
+                    $list.="<li><a href='?page=article&articleid=$issue'>{$file['name']}</a></li>";
+                    } else {
+                        $fname = $file["path"];
+                        $list.="<li><a href='$fname'>{$file['name']}</a> ({$file['type']})</li>";  
+                    }
+                }elseif(isset($_REQUEST["page"]) && $_REQUEST["page"] === 'events'){
+                    $issuepath = explode("/",$file["path"]);
+                    $issue=$issuepath[1];
+                    $list.="<li><a href='?page=event&eventid=$issue'>{$file['name']}</a></li>";
+                } else {
+                     $fname = $file["path"];
+                     $list.="<li><a href='$fname'>{$file['name']}</a> ({$file['type']})</li>";
+                }
             }
         };
         return $list;
