@@ -58,7 +58,13 @@
         $dirlist = getFileList("pages/", true, 1);
         foreach($dirlist as $file) {
             if ($file['name'] != "Home") {
-                $menu.="<li><a href='?page={$file['call']}'>{$file['name']}</a></li>";
+                // Issue #6 Remove Current page link
+                if(isset($_REQUEST["page"]) && strtoupper($_REQUEST["page"]) != strtoupper($file['name'])) { 
+                    $menu.="<li><a href='?page={$file['call']}'>{$file['name']}</a></li>";
+                } elseif(isset($_REQUEST["page"]) && strtoupper($_REQUEST["page"]) === strtoupper($file['name'])) { 
+                    $menu.="<li>{$file['name']}</li>";
+
+                }
             }
         };
         $menu.= "<li>
