@@ -97,6 +97,11 @@ MCBVI on Facebook</a></li>";
     {
         $list = "";
         $dirlist = getFileList("$dir/", true,1);
+          if(isset($_REQUEST["page"]) && $_REQUEST["page"] === 'newsletters'){
+                foreach($dirlist as $file) {$sname[]=$file["name"];}
+ 
+                array_multisort($sname,SORT_DESC,$dirlist);
+          }
         foreach($dirlist as $file) {
             $fname = "";
             if ($file["type"] == "dir") {
@@ -199,7 +204,34 @@ MCBVI on Facebook</a></li>";
         $d->close();
         return $retval;
     }
-
+    function TableOfContents($page,$depth)
+	/*AutoTOC function written by Alex Freeman
+	* Released under CC-by-sa 3.0 license
+	* http://www.10stripe.com/  
+     <?php //echo TableOfContents($page,3); ?>
+    */
+	{
+        $html_string = getContent($page);
+    //get the headings down to the specified depth
+	$pattern = '/<h[2-'.$depth.']*[^>]*>.*?<\/h[2-'.$depth.']>/';
+	$whocares = preg_match_all($pattern,$html_string,$winners);
+ 
+	//reformat the results to be more usable
+	$heads = implode("\n",$winners[0]);
+	$heads = str_replace('<a name="','<a href="#',$heads);
+	$heads = str_replace('</a>','',$heads);
+	$heads = preg_replace('/<h([1-'.$depth.'])>/','<li class="toc$1">',$heads);
+	$heads = preg_replace('/<\/h[1-'.$depth.']>/','</a></li>',$heads);
+ 
+	//plug the results into appropriate HTML tags
+	$contents = '<div id="toc"> 
+	<p id="toc-header" style="float:right">Contents</p>
+	<ul style="float:right">
+	'.$heads.'
+	</ul>
+	</div>';
+	echo $contents;
+	}
 ?><!doctype html>
 <html>
 <head>
@@ -254,6 +286,7 @@ MCBVI on Facebook</a></li>";
 ?>
 
     <div id="Content">
+   
         <?php echo getContent($page); ?>
     </div>
 
