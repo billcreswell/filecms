@@ -86,9 +86,8 @@
                 }
             }
         };
-        $menu.= "<li>
-<a href='https://www.facebook.com/pages/Michigan-Council-Of-The-Blind-Visually-Impaired/125509287540911'>
-MCBVI on Facebook</a></li>";
+    // Insert manual links
+       /** $menu.= "<li><a href='https://www.facebook.com/pages/your-site'>Facebook</a></li>"; **/
         $menu.= "</ul>";
         return $menu;
     }
@@ -232,68 +231,6 @@ MCBVI on Facebook</a></li>";
 	</div>';
 	echo $contents;
 	}
-?><!doctype html>
-<html>
-<head>
-    <title><?php echo $page; ?></title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-    <meta charset="UTF-8"/>
-    <meta name="HandheldFriendly" content="true"/><!--Blackberry Column View-->
-    <meta name="viewport" content="initial-scale=1.0"/><!--iPod-->
-    <meta name="viewport" content="width=device-width"/><!--android-->
-
-
-    <link rel="stylesheet" href="app/mobile.css" type="text/css" media="only screen and (max-width : 39em)"/>
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" media="all" type="text/css" href="app/miblind.css"/>
-    <![endif]-->
-    <link rel="stylesheet" href="app/miblind.css" type="text/css" media="only screen and (min-width : 39em)"/>
-
-    <!--<link href="images/logo57.png" rel="apple-touch-icon"/>-->
-
-
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-31081251-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-</head>
-
-<body>
-
-<?php
-    if(isset($_REQUEST["page"]) && ($_REQUEST["page"] != "home")) {
+    $theme="billcreswell.com";
+    include_once("/theme/" . $theme . "/main.tpl");
 ?>
-
-<div id="Banner">
-    <a href="/">MCBVI</a>
-    <a href="#Menu">Skip to Menu</a>
-    <br style="clear:both"/>
-</div>
-
-<?php
-    }
-?>
-
-    <div id="Content">
-   
-        <?php echo getContent($page); ?>
-    </div>
-
-    <div id="Menu" role="navigation">
-        <?php echo getMenuList(); ?>
-        <br style="clear:both"/>
-    </div>
-
-</body>
-</html>
