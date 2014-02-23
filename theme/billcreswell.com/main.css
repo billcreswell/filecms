@@ -1,0 +1,30 @@
+  body {
+     margin:0;padding:0px;
+     font: 1em Droid Sans, Verdana, Arial;
+     background-color:#efefef;
+ }
+#Banner {
+    margin:0px;
+    position:fixed;top:0;
+    width:100%;
+    padding:.5em;
+    color:#fff;
+    background-color:#444
+}
+#Banner H1 a{
+    color: #fff     
+}
+#Content {
+     margin: 100px auto;
+    width: 40em;
+    padding:1em;
+}      
+#Footer {
+     position:fixed;bottom:0;
+     width:100%;
+     padding:.5em;
+     background-color:#eee;
+}
+ 
+.atc {text-align:center}
+.cb {clear:both}
