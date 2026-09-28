@@ -232,5 +232,5 @@
 	echo $contents;
 	}
     $theme="billcreswell.com";
-    include_once("/theme/" . $theme . "/main.tpl");
+    include_once("./theme/" . $theme . "/main.tpl");
 ?>
